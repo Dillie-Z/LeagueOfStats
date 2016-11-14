@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
 
-// Join
+/* Join */
 router.post('/new', (req, res, next) => {
   const newUser = req.body;
   newUser.hash_pw = bcrypt.hashSync(newUser.password, 12);
@@ -29,7 +29,7 @@ router.post('/new', (req, res, next) => {
     });
 });
 
-// Login
+/* Login */
 router.post('/', (req, res, next) => {
   const user = req.body;
   db.listUsers()
