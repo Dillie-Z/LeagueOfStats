@@ -1,17 +1,41 @@
+/**
+ * QUERY POSTS
+ */
 'use strict';
 
-exports.up = (knex) => {
-  return knex.schema.dropTableIfExists('users').then(() => {
-    return knex.schema.createTable('users', (table) => {
-      table.increments();
-      table.string('name').notNullable().unique();
-      table.string('hash_pw').notNullable();
-      table.string('email').notNullable().unique();
-      table.timestamps(true, true);
-    });
-  });
+const knex = require('../knex');
+
+// Create
+const createUser = (newUsers) => {
+  return knex('users').returning('*').insert(newUsers);
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable('users');
+// Read
+const readUser = (id) => {
+  return knex('users').select('*').first().where('id', id);
+};
+
+// Update
+const updateUser = (id, changes) => {
+  changes.updated_at = new Date();
+
+  return knex('users').where('id', id).update(changes);
+};
+
+// Delete
+const deleteUser = (id) => {
+  return knex('users').where('id', id).del();
+};
+
+// Lists
+const listUsers = () => {
+  return knex('users').select('*').orderBy('created_at', 'asc');
+};
+
+module.exports = {
+  createUser,
+  readUser,
+  updateUser,
+  deleteUser,
+  listUsers,
 };
